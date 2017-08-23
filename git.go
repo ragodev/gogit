@@ -68,7 +68,7 @@ func (gr *GitRepo) Update() (err error) {
 	var cmd *exec.Cmd
 	var stdoutStderr []byte
 	if !exists(path.Join(gr.folder, ".git")) {
-		gr.log.Infof("Running: git pull %s %s", gr.repo, ".")
+		gr.log.Infof("Running: git clone %s %s", gr.repo, ".")
 		cmd = exec.Command("git", "clone", gr.repo, ".")
 	} else {
 		gr.log.Info("Running: git pull --rebase origin master")

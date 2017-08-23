@@ -26,7 +26,7 @@ func TestClone(t *testing.T) {
 	assert.Equal(t, nil, gr.Update())
 	assert.Equal(t, true, exists("testtest"))
 	assert.Equal(t, nil, gr.Update())
-	os.Remove("testtest")
+	os.RemoveAll("testtest")
 }
 func TestGeneral(t *testing.T) {
 	gr, err := New("https://github.com/schollz/asdf.git", "testtest")
@@ -41,7 +41,7 @@ func TestGeneral(t *testing.T) {
 	assert.Equal(t, true, exists("testtest"))
 	assert.Equal(t, nil, gr.Update())
 
-	origin, err := GetRemoteOriginURL("testtest/test")
+	origin, err := GetRemoteOriginURL("testtest")
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "https://github.com/schollz/test.git", origin)
 	os.RemoveAll("testtest")
