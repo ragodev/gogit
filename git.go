@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -66,9 +67,9 @@ func (gr *GitRepo) Update() (err error) {
 	}
 	var cmd *exec.Cmd
 	var stdoutStderr []byte
-	if !exists(gr.folder) {
-		gr.log.Infof("Running: git pull %s %s", gr.repo, gr.folder)
-		cmd = exec.Command("git", "clone", gr.repo, gr.folder)
+	if !exists(path.Join(gr.folder, ".git")) {
+		gr.log.Infof("Running: git pull %s %s", gr.repo, ".")
+		cmd = exec.Command("git", "clone", gr.repo, ".")
 	} else {
 		gr.log.Info("Running: git pull --rebase origin master")
 		cmd = exec.Command("git", "pull", "--rebase", "origin", "master")
