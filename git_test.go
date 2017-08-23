@@ -19,6 +19,15 @@ func TestCommit(t *testing.T) {
 	assert.Equal(t, nil, err)
 }
 
+func TestClone(t *testing.T) {
+	gr, err := New("https://github.com/schollz/test.git", "testtest")
+	gr.Debug(true)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, nil, gr.Update())
+	assert.Equal(t, true, exists("testtest"))
+	assert.Equal(t, nil, gr.Update())
+	os.Remove("testtest")
+}
 func TestGeneral(t *testing.T) {
 	gr, err := New("https://github.com/schollz/asdf.git", "testtest")
 	gr.Debug(true)
@@ -30,7 +39,6 @@ func TestGeneral(t *testing.T) {
 	assert.Equal(t, nil, err)
 	assert.Equal(t, nil, gr.Update())
 	assert.Equal(t, true, exists("testtest"))
-	assert.Equal(t, true, exists("testtest/test"))
 	assert.Equal(t, nil, gr.Update())
 
 	origin, err := GetRemoteOriginURL("testtest/test")
