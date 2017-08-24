@@ -37,7 +37,7 @@ func New(repo string, optionalFolder ...string) (*GitRepo, error) {
 		return gr, err
 	}
 	if !exists(gr.folder) {
-		err = os.MkdirAll(gr.folder, 0666)
+		err = os.MkdirAll(gr.folder, 0775)
 		if err != nil {
 			return gr, err
 		}
@@ -122,12 +122,12 @@ func (gr *GitRepo) AddData(data []byte, fp string) (err error) {
 	gr.log.Infof("Got file '%s' in path '%s'", file, dir)
 	if len(dir) > 0 {
 		gr.log.Infof("Created directory %s", dir)
-		err = os.MkdirAll(dir, 0644)
+		err = os.MkdirAll(dir, 0775)
 		if err != nil {
 			return
 		}
 	}
-	err = ioutil.WriteFile(fp, data, 0644)
+	err = ioutil.WriteFile(fp, data, 0666)
 	if err != nil {
 		return err
 	}
