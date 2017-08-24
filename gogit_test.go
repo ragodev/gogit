@@ -47,6 +47,6 @@ func TestGeneral(t *testing.T) {
 	os.RemoveAll("testtest")
 	os.RemoveAll("test")
 
-	assert.Equal(t, "test", parseRepoFolder("git@github.com:schollz/test.git"))
-	assert.Equal(t, "gojot", parseRepoFolder("https://github.com/schollz/gojot.git"))
+	assert.Equal(t, "test", ParseRepoFolder("git@github.com:schollz/test.git"))
+	assert.Equal(t, "gojot", ParseRepoFolder("https://github.com/schollz/gojot.git"))
 }
