@@ -29,12 +29,12 @@ func TestClone(t *testing.T) {
 	os.RemoveAll("testtest")
 }
 func TestGeneral(t *testing.T) {
-	gr, err := New("https://github.com/schollz/asdf.git", "testtest")
+	gr, err := New("git@github.com:schollz/asdf.git", "testtest")
 	gr.Debug(true)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, true, nil != gr.Update())
 
-	gr, err = New("https://github.com/schollz/test.git")
+	gr, err = New("git@github.com:schollz/test.git")
 	gr.Debug(true)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, nil, gr.Update())
@@ -43,7 +43,7 @@ func TestGeneral(t *testing.T) {
 
 	origin, err := GetRemoteOriginURL("test")
 	assert.Equal(t, nil, err)
-	assert.Equal(t, "https://github.com/schollz/test.git", origin)
+	assert.Equal(t, "git@github.com:schollz/test.git", origin)
 	os.RemoveAll("testtest")
 	os.RemoveAll("test")
 
