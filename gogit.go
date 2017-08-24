@@ -17,7 +17,8 @@ import (
 type GitRepo struct {
 	repo   string
 	folder string
-	log    *logrus.Logger
+	logger *logrus.Logger
+	log    *logrus.Entry
 }
 
 // New returns a new GPGStore that can then needs to be initialized with Init()
@@ -29,28 +30,31 @@ func New(repo string, optionalFolder ...string) (*GitRepo, error) {
 	if len(optionalFolder) > 0 {
 		gr.folder = optionalFolder[0]
 	} else {
-		gr.folder = parseRepoFolder(repo)
+		gr.folder = ParseRepoFolder(repo)
 	}
 	gr.folder, err = filepath.Abs(gr.folder)
 	if err != nil {
 		return gr, err
 	}
 	if !exists(gr.folder) {
-		err = os.MkdirAll(gr.folder, 0700)
+		err = os.MkdirAll(gr.folder, 0666)
 		if err != nil {
 			return gr, err
 		}
 	}
-	gr.log = logrus.New()
-	gr.log.SetLevel(logrus.WarnLevel)
+	gr.logger = logrus.New()
+	gr.log = gr.logger.WithFields(logrus.Fields{
+		"source": "gogit",
+	})
+	gr.logger.SetLevel(logrus.WarnLevel)
 	return gr, nil
 }
 
 func (gr *GitRepo) Debug(on bool) {
 	if on {
-		gr.log.SetLevel(logrus.InfoLevel)
+		gr.logger.SetLevel(logrus.InfoLevel)
 	} else {
-		gr.log.SetLevel(logrus.WarnLevel)
+		gr.logger.SetLevel(logrus.WarnLevel)
 	}
 }
 
@@ -167,7 +171,7 @@ func GetRemoteOriginURL(repoFolder string) (repo string, err error) {
 	return
 }
 
-func parseRepoFolder(repo string) (folder string) {
+func ParseRepoFolder(repo string) (folder string) {
 	firstPart := strings.Split(repo, ".git")[0]
 	firstPartSplit := strings.Split(firstPart, "/")
 	folder = strings.TrimSpace(firstPartSplit[len(firstPartSplit)-1])
