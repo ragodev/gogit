@@ -71,17 +71,20 @@ func (gr *GitRepo) Update() (err error) {
 	}
 	var cmd *exec.Cmd
 	var stdoutStderr []byte
+	pullOrClone := ""
 	if !exists(path.Join(gr.folder, ".git")) {
 		gr.log.Infof("Running: git clone %s %s", gr.repo, ".")
 		cmd = exec.Command("git", "clone", gr.repo, ".")
+		pullOrClone = "clone"
 	} else {
 		gr.log.Info("Running: git pull --rebase origin master")
 		cmd = exec.Command("git", "pull", "--rebase", "origin", "master")
+		pullOrClone = "pull"
 	}
 	stdoutStderr, err = cmd.CombinedOutput()
 	gr.log.Infof("Output: [%s]\n", stdoutStderr)
 	if bytes.Contains(stdoutStderr, []byte("fatal")) {
-		err = errors.New("Could not clone repo")
+		err = errors.New("Could not " + pullOrClone + " repo")
 	}
 	return
 }
@@ -127,7 +130,7 @@ func (gr *GitRepo) AddData(data []byte, fp string) (err error) {
 			return
 		}
 	}
-	err = ioutil.WriteFile(fp, data, 0666)
+	err = ioutil.WriteFile(fp, data, 0755)
 	if err != nil {
 		return err
 	}
