@@ -145,8 +145,8 @@ func (gr *GitRepo) AddData(data []byte, fp string) (err error) {
 		return
 	}
 
-	cmd = exec.Command("git", "commit", "-m", "Add "+fp, fp)
 	fileName, _ := filepath.Split(fp)
+	cmd = exec.Command("git", "commit", "-m", "Add "+fileName, fp)
 	gr.log.Info("git", "commit", "-am", "Add "+fileName, fp)
 	stdoutStderr, _ = cmd.CombinedOutput()
 	gr.log.Infof("Output: [%s]\n", stdoutStderr)
