@@ -22,7 +22,9 @@ type GitRepo struct {
 }
 
 // New returns a new GPGStore that can then needs to be initialized with Init()
-// The repo is cloned into the `rootDir`.
+// The `repo` is the supplied git repository. Optionally you can include
+// a string for which folder to save the repo to. The default location is the
+// current directory.
 func New(repo string, optionalFolder ...string) (*GitRepo, error) {
 	var err error
 	gr := new(GitRepo)
@@ -50,6 +52,7 @@ func New(repo string, optionalFolder ...string) (*GitRepo, error) {
 	return gr, nil
 }
 
+// Debug will allow verbose output if enabled.
 func (gr *GitRepo) Debug(on bool) {
 	if on {
 		gr.logger.SetLevel(logrus.InfoLevel)
@@ -89,6 +92,7 @@ func (gr *GitRepo) Update() (err error) {
 	return
 }
 
+// Push will push the repo to the master branch.
 func (gr *GitRepo) Push() (err error) {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -111,6 +115,10 @@ func (gr *GitRepo) Push() (err error) {
 	return
 }
 
+// AddData will write the `data` to a new file, `fp` in the repo
+// and then perform a commit with the message of that files name.
+// Note that the filename should be respective to the root of the
+// repository.
 func (gr *GitRepo) AddData(data []byte, fp string) (err error) {
 	cwd, err := os.Getwd()
 	if err != nil {
