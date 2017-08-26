@@ -21,7 +21,7 @@ type GitRepo struct {
 	log    *logrus.Entry
 }
 
-// New returns a new GPGStore that can then needs to be initialized with Init()
+// New returns a new GPGStore.
 // The `repo` is the supplied git repository. Optionally you can include
 // a string for which folder to save the repo to. The default location is the
 // current directory.
